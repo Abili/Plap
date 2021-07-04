@@ -17,6 +17,7 @@
                 android:id="@+id/toolbarLayout"
                 layout="@layout/toolbar" />
 
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
@@ -30,6 +31,7 @@
                 app:tabTextAppearance="@style/TabTextAppearance.Timber" />
 
         </com.google.android.material.appbar.AppBarLayout>
+
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"

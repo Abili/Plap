@@ -28,18 +28,16 @@ import java.util.Collections
 // TODO ideally these should all go away and be moved to service orienated injected classes
 object Utils {
     const val MUSIC_ONLY_SELECTION = "$IS_MUSIC=1 AND $TITLE != ''"
-    const val EMPTY_ALBUM_ART_URI = "android.resource://com.naman14.timberx/drawable/icon"
+    const val EMPTY_ALBUM_ART_URI = "android.resource://com.aisc.plap/drawable/plap_icon"
 
     fun getAlbumArtUri(albumId: Long) = withAppendedId("content://media/external/audio/albumart".toUri(), albumId)!!
 
     fun makeShortTimeString(context: Context, secs: Long): String {
         var seconds = secs
-        val hours: Long
-        val minutes: Long
 
-        hours = seconds / 3600
+        val hours: Long = seconds / 3600
         seconds %= 3600
-        minutes = seconds / 60
+        val minutes: Long = seconds / 60
         seconds %= 60
 
         val formatString = if (hours == 0L) {

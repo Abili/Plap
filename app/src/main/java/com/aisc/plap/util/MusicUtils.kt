@@ -50,7 +50,7 @@ object MusicUtils {
         return try {
             MediaStore.Images.Media.getBitmap(context.contentResolver, Utils.getAlbumArtUri(albumId))
         } catch (e: FileNotFoundException) {
-            BitmapFactory.decodeResource(context.resources, R.drawable.icon)
+            BitmapFactory.decodeResource(context.resources, R.drawable.plap_icon)
         }
     }
 }

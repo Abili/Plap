@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import java.lang.System.currentTimeMillis
 import androidx.media.app.NotificationCompat as NotificationMediaCompat
 
-private const val CHANNEL_ID = "timberx_channel_01"
+private const val CHANNEL_ID = "plap_channel_01"
 private const val NOTIFICATION_ID = 888
 
 interface Notifications {
@@ -156,7 +156,7 @@ class RealNotifications(
         createNotificationChannel()
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_notification)
-            setContentTitle("TimberX")
+            setContentTitle("Plap")
             setColorized(true)
             setShowWhen(false)
             setWhen(postTime)

@@ -7,8 +7,10 @@
 
     <!-- Splash theme. -->
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splashscreen</item>
+        <item name="android:windowBackground">@drawable/plap_icon</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:navigationBarColor">#ffffff</item>
+        <item name="android:statusBarColor">#ffffff</item>
     </style>
 
     <style name="AppTheme.Light" parent="ParentTheme.Light">
