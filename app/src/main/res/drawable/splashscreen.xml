@@ -6,7 +6,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/plap_icon" />
+            android:src="@drawable/icon_p" />
     </item>
 
 </layer-list>
