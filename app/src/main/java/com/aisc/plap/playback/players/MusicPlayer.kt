@@ -15,11 +15,18 @@
 package com.aisc.plap.playback.players
 
 import android.app.Application
+import android.app.FragmentManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.PowerManager
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import com.aisc.equalizer.DialogEqualizerFragment
+import com.aisc.equalizer.EqualizerFragment
+import com.aisc.plap.R
 import timber.log.Timber
+
 
 typealias OnPrepared<T> = T.() -> Unit
 typealias OnError<T> = T.(error: Throwable) -> Unit
@@ -60,15 +67,17 @@ interface MusicPlayer {
     fun onError(error: OnError<MusicPlayer>)
 
     fun onCompletion(completion: OnCompletion<MusicPlayer>)
+    fun getSessionId(): Int
+    fun setUpEqualizer()
 }
 
 class RealMusicPlayer(internal val context: Application) : MusicPlayer,
-        MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnErrorListener,
-        MediaPlayer.OnCompletionListener {
+    MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnErrorListener,
+    MediaPlayer.OnCompletionListener {
 
-    private var _player: MediaPlayer? = null
-    private val player: MediaPlayer
+    var _player: MediaPlayer? = null
+    val player: MediaPlayer
         get() {
             if (_player == null) {
                 _player = createPlayer(this)
@@ -84,6 +93,7 @@ class RealMusicPlayer(internal val context: Application) : MusicPlayer,
     override fun play() {
         Timber.d("play()")
         player.start()
+
     }
 
     override fun setSource(path: String): Boolean {
@@ -159,6 +169,34 @@ class RealMusicPlayer(internal val context: Application) : MusicPlayer,
         this.onCompletion = completion
     }
 
+    override fun getSessionId(): Int {
+        return player.audioSessionId
+    }
+
+    override fun setUpEqualizer() {
+        val audioSessionId = player.audioSessionId
+        val fragment: DialogEqualizerFragment = DialogEqualizerFragment.newBuilder()
+            .setAudioSessionId(audioSessionId)
+            .themeColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.colorInvertedAlpha
+                )
+            )
+            .textColor(ContextCompat.getColor(context, R.color.blueDark))
+            .accentAlpha(ContextCompat.getColor(context, R.color.blueDark))
+            .darkColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.colorInvertedAlpha2
+                )
+            )
+            .setAccentColor(ContextCompat.getColor(context, R.color.blueDark))
+            .build()
+
+
+    }
+
     // Callbacks from stock MediaPlayer...
 
     override fun onPrepared(mp: MediaPlayer?) {
@@ -181,7 +219,7 @@ class RealMusicPlayer(internal val context: Application) : MusicPlayer,
 
 private fun createPlayer(owner: RealMusicPlayer): MediaPlayer {
     return MediaPlayer().apply {
-        setWakeMode(owner.context, PowerManager.PARTIAL_WAKE_LOCK)
+        //setWakeMode(owner.context, PowerManager.PARTIAL_WAKE_LOCK)
         val attr = AudioAttributes.Builder().apply {
             setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             setUsage(AudioAttributes.USAGE_MEDIA)
@@ -192,3 +230,7 @@ private fun createPlayer(owner: RealMusicPlayer): MediaPlayer {
         setOnErrorListener(owner)
     }
 }
+
+
+
+

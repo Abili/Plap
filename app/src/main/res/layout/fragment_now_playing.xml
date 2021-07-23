@@ -5,17 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.aisc.plap.network.models.ArtworkSize"/>
+        <import type="com.aisc.plap.network.models.ArtworkSize" />
         <variable
             name="viewModel"
             type="com.aisc.plap.ui.viewmodels.NowPlayingViewModel" />
     </data>
 
     <RelativeLayout
+        android:id="@+id/eqFrame"
+        android:background="?android:windowBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top"
-        android:background="?android:windowBackground"
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -41,31 +42,42 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="start"
-                android:padding="4dp"
                 android:layout_margin="16dp"
                 android:background="?selectableItemBackgroundBorderless"
+                android:padding="4dp"
                 android:src="@drawable/ic_arrow_back" />
 
         </androidx.appcompat.widget.Toolbar>
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.aisc.plap.ui.widgets.SquareImageView
+            android:id="@+id/img_id"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/controls"
             android:layout_below="@+id/toolbar"
+            android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="20dp"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/blueDark"
             android:layout_marginRight="70dp"
+            android:background="@drawable/default_album_art_small"
             android:elevation="5dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/plap_icon"
             app:albumArtist="@{viewModel.currentData.artist}"
             app:albumId="@{safeUnbox(viewModel.currentData.artworkId)}"
             app:albumName="@{viewModel.currentData.album}"
             app:artworkSize="@{ArtworkSize.MEGA}" />
+
+        <ImageView
+            android:id="@+id/equalizer"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignBottom="@+id/img_id"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_equalizer" />
 
 
         <LinearLayout
@@ -106,6 +118,8 @@
 
             <com.aisc.plap.ui.widgets.MediaSeekBar
                 android:id="@+id/seekBar"
+                android:foregroundTint="@color/blueDark"
+                android:progressTint="@color/blueDark"
                 style="@style/SongSeekBarHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,15 +253,15 @@
                     android:layout_marginBottom="4dp"
                     android:orientation="horizontal">
 
-                    <com.aisc.plap.ui.widgets.SquareImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/upNextAlbumArt"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/plap_icon"
-                        android:scaleType="centerInside" />
+                        android:background="@drawable/default_album_art_small"
+                        android:scaleType="centerCrop" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_weight="1"
@@ -283,11 +297,11 @@
                         android:id="@+id/btnQueue"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:background="?selectableItemBackgroundBorderless"
+                        android:padding="4dp"
                         android:src="@drawable/ic_queue_music" />
 
                 </LinearLayout>

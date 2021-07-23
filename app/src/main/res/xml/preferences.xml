@@ -17,6 +17,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        android:defaultValue="custom"
+        android:key="equalizer_preference"
+        android:summary="@string/Set_up_equalizer"
+        android:title="@string/equalizer"
+        app:iconSpaceReserved="false" />
+
     <ListPreference
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"

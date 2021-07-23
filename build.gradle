@@ -1,4 +1,5 @@
 buildscript {
+    ext.kotlin_version = '1.4.10'
     apply from: './dependencies.gradle'
 
     repositories {
@@ -12,6 +13,8 @@ buildscript {
         classpath "com.google.gms:google-services:4.3.8"
         classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.crashlyticsPlugin}"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:${versions.spotlessPlugin}"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -20,6 +23,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 

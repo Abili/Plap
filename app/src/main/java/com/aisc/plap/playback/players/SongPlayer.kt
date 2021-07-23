@@ -51,6 +51,7 @@ import android.support.v4.media.session.PlaybackStateCompat.STATE_NONE
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import com.aisc.plap.R
 import com.aisc.plap.constants.Constants.ACTION_REPEAT_QUEUE
@@ -126,6 +127,8 @@ interface SongPlayer {
     fun setPlaybackState(state: PlaybackStateCompat)
 
     fun restoreFromQueueData(queueData: QueueEntity)
+    fun getSessionId(): Int
+
 }
 
 class RealSongPlayer(
@@ -146,19 +149,22 @@ class RealSongPlayer(
     private var metadataBuilder = MediaMetadataCompat.Builder()
     private var stateBuilder = createDefaultPlaybackState()
 
-    private lateinit var audioManager: AudioManager
+    private var audioManager: AudioManager
     private lateinit var focusRequest: AudioFocusRequest
 
-    private var mediaSession = MediaSessionCompat(context, context.getString(R.string.app_name)).apply {
-        setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
-        setCallback(MediaSessionCallback(this, this@RealSongPlayer, songsRepository, queueDao))
-        setPlaybackState(stateBuilder.build())
+    private var mediaSession =
+        MediaSessionCompat(context, context.getString(R.string.app_name)).apply {
+            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+            setCallback(MediaSessionCallback(this, this@RealSongPlayer, songsRepository, queueDao))
+            setPlaybackState(stateBuilder.build())
 
-        val sessionIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-        val sessionActivityPendingIntent = PendingIntent.getActivity(context, 0, sessionIntent, 0)
-        setSessionActivity(sessionActivityPendingIntent)
-        isActive = true
-    }
+            val sessionIntent =
+                context.packageManager.getLaunchIntentForPackage(context.packageName)
+            val sessionActivityPendingIntent =
+                PendingIntent.getActivity(context, 0, sessionIntent, 0)
+            setSessionActivity(sessionActivityPendingIntent)
+            isActive = true
+        }
 
     init {
         queue.setMediaSession(mediaSession)
@@ -216,7 +222,11 @@ class RealSongPlayer(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             audioManager.requestAudioFocus(focusRequest)
         } else {
-            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+            audioManager.requestAudioFocus(
+                this,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_LOSS
+            )
         }
         queue.ensureCurrentId()
 
@@ -240,6 +250,8 @@ class RealSongPlayer(
             musicPlayer.prepare()
         }
     }
+
+
 
     override fun playSong(id: Long) {
         Timber.d("playSong(): $id")
@@ -266,9 +278,9 @@ class RealSongPlayer(
             musicPlayer.seekTo(position)
             updatePlaybackState {
                 setState(
-                        mediaSession.controller.playbackState.state,
-                        position.toLong(),
-                        1F
+                    mediaSession.controller.playbackState.state,
+                    position.toLong(),
+                    1F
                 )
             }
         }
@@ -283,6 +295,7 @@ class RealSongPlayer(
             }
         }
     }
+
 
     override fun nextSong() {
         Timber.d("nextSong()")
@@ -404,6 +417,13 @@ class RealSongPlayer(
         }
     }
 
+    override fun getSessionId(): Int {
+        return musicPlayer.getSessionId()
+
+    }
+
+
+
     private fun setMetaData(song: Song) {
         // TODO make music utils injectable
         val artwork = MusicUtils.getAlbumArtBitmap(context, song.albumId)
@@ -419,16 +439,19 @@ class RealSongPlayer(
         mediaSession.setMetadata(mediaMetadata)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onAudioFocusChange(focusChange: Int) {
         when (focusChange) {
             AudioManager.AUDIOFOCUS_LOSS -> {
+                audioManager.abandonAudioFocusRequest(focusRequest)
                 pause()
             }
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                audioManager.abandonAudioFocusRequest(focusRequest)
                 pause()
             }
             AudioManager.AUDIOFOCUS_GAIN -> {
-               playSong()
+                playSong()
             }
         }
     }
@@ -436,14 +459,15 @@ class RealSongPlayer(
 
 private fun createDefaultPlaybackState(): PlaybackStateCompat.Builder {
     return PlaybackStateCompat.Builder().setActions(
-            ACTION_PLAY
-                    or ACTION_PAUSE
-                    or ACTION_PLAY_FROM_SEARCH
-                    or ACTION_PLAY_FROM_MEDIA_ID
-                    or ACTION_PLAY_PAUSE
-                    or ACTION_SKIP_TO_NEXT
-                    or ACTION_SKIP_TO_PREVIOUS
-                    or ACTION_SET_SHUFFLE_MODE
-                    or ACTION_SET_REPEAT_MODE)
-            .setState(STATE_NONE, 0, 1f)
+        ACTION_PLAY
+                or ACTION_PAUSE
+                or ACTION_PLAY_FROM_SEARCH
+                or ACTION_PLAY_FROM_MEDIA_ID
+                or ACTION_PLAY_PAUSE
+                or ACTION_SKIP_TO_NEXT
+                or ACTION_SKIP_TO_PREVIOUS
+                or ACTION_SET_SHUFFLE_MODE
+                or ACTION_SET_REPEAT_MODE
+    )
+        .setState(STATE_NONE, 0, 1f)
 }

@@ -35,7 +35,7 @@ import androidx.core.graphics.toColorInt
 import androidx.media.session.MediaButtonReceiver.buildMediaButtonPendingIntent
 import androidx.palette.graphics.Palette
 import com.aisc.plap.R
-import com.aisc.plap.playback.TimberMusicService
+import com.aisc.plap.playback.PlapMusicService
 import com.aisc.plap.constants.Constants.ACTION_NEXT
 import com.aisc.plap.constants.Constants.ACTION_PLAY_PAUSE
 import com.aisc.plap.constants.Constants.ACTION_PREVIOUS
@@ -129,7 +129,7 @@ class RealNotifications(
     }
 
     private fun getPreviousAction(context: Context): NotificationCompat.Action {
-        val actionIntent = Intent(context, TimberMusicService::class.java).apply {
+        val actionIntent = Intent(context, PlapMusicService::class.java).apply {
             action = ACTION_PREVIOUS
         }
         val pendingIntent = PendingIntent.getService(context, 0, actionIntent, 0)
@@ -137,7 +137,7 @@ class RealNotifications(
     }
 
     private fun getPlayPauseAction(context: Context, @IdRes playButtonResId: Int): NotificationCompat.Action {
-        val actionIntent = Intent(context, TimberMusicService::class.java).apply {
+        val actionIntent = Intent(context, PlapMusicService::class.java).apply {
             action = ACTION_PLAY_PAUSE
         }
         val pendingIntent = PendingIntent.getService(context, 0, actionIntent, 0)
@@ -145,7 +145,7 @@ class RealNotifications(
     }
 
     private fun getNextAction(context: Context): NotificationCompat.Action {
-        val actionIntent = Intent(context, TimberMusicService::class.java).apply {
+        val actionIntent = Intent(context, PlapMusicService::class.java).apply {
             action = ACTION_NEXT
         }
         val pendingIntent = PendingIntent.getService(context, 0, actionIntent, 0)

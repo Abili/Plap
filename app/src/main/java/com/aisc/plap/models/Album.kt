@@ -18,9 +18,9 @@ import android.database.Cursor
 import android.provider.MediaStore.Audio.Albums.*
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
-import com.aisc.plap.playback.TimberMusicService.Companion.TYPE_ALBUM
 import com.aisc.plap.extensions.value
 import com.aisc.plap.extensions.valueOrEmpty
+import com.aisc.plap.playback.PlapMusicService.Companion.TYPE_ALBUM
 import com.aisc.plap.util.Utils
 import kotlinx.android.parcel.Parcelize
 

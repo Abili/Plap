@@ -17,7 +17,7 @@ package com.aisc.plap.models
 import android.database.Cursor
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
-import com.aisc.plap.playback.TimberMusicService.Companion.TYPE_PLAYLIST
+import com.aisc.plap.playback.PlapMusicService.Companion.TYPE_PLAYLIST
 import com.aisc.plap.extensions.value
 import com.aisc.plap.extensions.valueOrEmpty
 import kotlinx.android.parcel.Parcelize

@@ -26,7 +26,7 @@ import android.provider.MediaStore.Audio.Media.TRACK
 import android.provider.MediaStore.Audio.Media._ID
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
-import com.aisc.plap.playback.TimberMusicService.Companion.TYPE_SONG
+import com.aisc.plap.playback.PlapMusicService.Companion.TYPE_SONG
 import com.aisc.plap.extensions.value
 import com.aisc.plap.extensions.valueOrDefault
 import com.aisc.plap.extensions.valueOrEmpty

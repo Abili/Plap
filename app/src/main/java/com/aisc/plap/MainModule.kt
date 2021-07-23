@@ -18,8 +18,8 @@ import android.app.Application
 import android.content.ComponentName
 import android.content.ContentResolver
 import com.aisc.plap.playback.MediaSessionConnection
+import com.aisc.plap.playback.PlapMusicService
 import com.aisc.plap.playback.RealMediaSessionConnection
-import com.aisc.plap.playback.TimberMusicService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.dsl.module.module
 
@@ -32,7 +32,7 @@ val mainModule = module {
     }
 
     single {
-        val component = ComponentName(get(), TimberMusicService::class.java)
+        val component = ComponentName(get(), PlapMusicService::class.java)
         RealMediaSessionConnection(get(), component)
     } bind MediaSessionConnection::class
 

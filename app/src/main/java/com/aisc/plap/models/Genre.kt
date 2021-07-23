@@ -19,7 +19,7 @@ import android.provider.MediaStore.Audio.Genres.NAME
 import android.provider.MediaStore.Audio.Genres._ID
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
-import com.aisc.plap.playback.TimberMusicService.Companion.TYPE_GENRE
+import com.aisc.plap.playback.PlapMusicService.Companion.TYPE_GENRE
 import com.aisc.plap.extensions.value
 import com.aisc.plap.extensions.valueOrEmpty
 import kotlinx.android.parcel.Parcelize
